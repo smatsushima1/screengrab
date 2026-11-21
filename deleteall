@@ -1,0 +1,5 @@
+#!/bin/bash
+
+rm -rf ~/Downloads/screenshots/*
+#rm -rf ~/.Trash/*
+
