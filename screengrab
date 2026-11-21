@@ -1,0 +1,60 @@
+#!/bin/bash
+
+# Notes:
+# - run this by using "Bash" instead of "."
+# - utilize pdfunite to combine pdfs into one pdf
+
+# Establish beginning of iterative loop
+# istart=$1
+# if [[ -z "$istart" ]]; then
+    # istart=1
+# fi
+fn=$1
+
+echo 'RUNNING - press [Enter] to pause or [Ctrl-C] to quit...'
+sleep 5
+while true; do
+    for (( i=1; i<=9999; i++ ))
+    do
+        # Calculate length
+        length="${#i}"
+        if [[ "$length" == 1 ]]; then
+            i_name="000${i}"
+        elif [[ "$length" == 2 ]]; then
+            i_name="00${i}"
+        elif [[ "$length" == 3 ]]; then
+            i_name="0${i}"
+        else
+            i_name="$i"
+        fi
+        # Capture screen
+        # Widths:
+        # Total screen width: 1710
+        # Most readable, but narrow for 9 pages: 620
+        # 1/2 screen: 734
+        # Max width for 9 pages: 788
+        # Min margins: 92 from leftmost screen
+        # Heights:
+        # Total height: 1112
+        # Header bar: 39
+        # Window header: 28
+        # Presets:
+        # Kindle for Mac, half of page
+        # Font: Amazon Ember Bold
+        # Font size: 6
+        # Header and footer included, small margins, 9 page printing removes header and footer: 60, 67, 734, 1044
+        screencapture -x -R 60,67,734,1044 -o -t pdf ~/Downloads/screenshots/"${i_name}_${fn}".pdf
+        osascript -e \
+            'tell application "System Events"
+                key code 124
+            end tell'
+        # Check if a key was pressed, timeout length is also sleep length
+        if read -t 0.1 -r; then
+            read -r -p 'PAUSED - Press [Enter] to resume or [Ctrl-C] to quit...'
+            echo 'RESUMING - Press [Enter] to pause or [Ctrl-C] to quit...'
+            sleep 5
+        fi
+    done
+done
+
+

@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Set the directory containing the files
+directory="Downloads/sf50_sf75/"
+
+# Loop through each file in the directory
+for file in "$directory"/*; do
+  # Check if it's a file (not a directory)
+  if [ -f "$file" ]; then
+    # Extract the filename and extension
+    filename=$(basename "$file")
+    extension="${filename##*.}"
+    filename_no_ext="${filename%.*}"
+
+    # Create the new filename
+    fname="$filename_no_ext.$extension"
+    new_filename="${fname//-/}"
+
+    echo $new_filename
+    # Rename the file
+    mv "$file" "$directory/$new_filename"
+
+    # Print a message (optional)
+    echo "Renamed '$filename' to '$new_filename'"
+  fi
+done
